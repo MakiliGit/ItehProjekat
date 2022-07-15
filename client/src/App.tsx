@@ -24,64 +24,7 @@ function App() {
   const [items, setItems] = useState<Order[]>([])
   const [categories, setCategories] = useState<ProductCategory[]>([]);
 
-  const getProduct = (id: number) => {
-    return products.find(element => element.id === id);
-  }
-  const addOrder = (product: Product, ammount = 1) => {
-    setItems(prev => {
-      if (prev.find(element => element.product === product)) {
-        return prev.map(element => {
-          if (element.product !== product) {
-            return element;
-          }
-          return { ...element, ammount: element.ammount + ammount };
-        })
-      } else {
-        return [...prev, { product, ammount }]
-      }
-    })
-  }
-  const deleteOrder = (order: Order) => {
-    setItems(prev => {
-      return prev.filter(element => element !== order);
-    })
-  }
-  const updateOrder = (order: Order, ammount: number) => {
-    setItems(prev => {
-      return prev.map(element => {
-        if (element === order) {
-          return { ...element, ammount: ammount }
-        }
-        return element;
-      })
-    })
-  }
-  const orderUp = async (phone: string, adress: string) => {
-    const cart = {
-      phone: phone,
-      adress: adress,
-      items: items
-    };
-    await axios.post(SERVER_URL + '/cart', cart);
-
-    setItems([]);
-  }
-  const updateProduct = async (id: number, name: string, price: number, category: number, description: string) => {
-    await axios.patch(SERVER_URL + '/product/' + id, {
-      name: name,
-      price: price,
-      description: description,
-      productCategory: category
-    });
-    setProducts(prev => {
-      return prev.map(element => {
-        if (element.id === id) {
-          return { ...element, name, price, description, productCategory: categories.find(elem => elem.id === category)! }
-        }
-        return element;
-      })
-    })
-  }
+ 
   const createProduct = async (data: FormData) => {
     const res = await axios.post(SERVER_URL + '/product', data);
     setProducts(prev => {
